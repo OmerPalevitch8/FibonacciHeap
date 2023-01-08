@@ -8,6 +8,10 @@
  */
 public class FibonacciHeap
 {
+    private HeapNode min;
+    private int size = 0;
+    private int sum_marked = 0;
+    private int sum_cuts = 0;
    /**
     * public boolean isEmpty()
     *
@@ -17,7 +21,7 @@ public class FibonacciHeap
     public boolean isEmpty()
 
     {
-    	return false; // should be replaced by student code
+    	return min == null;
     }
 		
    /**
@@ -41,7 +45,20 @@ public class FibonacciHeap
     */
     public void deleteMin()
     {
-     	return; // should be replaced by student code
+     	//if min is the only one
+        if((min.child==null)&(min.right==null))
+        {
+            min = null;
+            this.size--1;
+            return;
+        }
+        else
+        {
+             this.size--1;
+
+        }
+
+
      	
     }
 
@@ -53,7 +70,14 @@ public class FibonacciHeap
     */
     public HeapNode findMin()
     {
-    	return new HeapNode(678);// should be replaced by student code
+    	if(this.isEmpty())
+        {
+            return null;
+        }
+        else
+        {
+           return this.min;
+        }
     } 
     
    /**
@@ -64,7 +88,7 @@ public class FibonacciHeap
     */
     public void meld (FibonacciHeap heap2)
     {
-    	  return; // should be replaced by student code   		
+
     }
 
    /**
@@ -75,7 +99,8 @@ public class FibonacciHeap
     */
     public int size()
     {
-    	return -123; // should be replaced by student code
+
+        return this.size;
     }
     	
     /**
@@ -111,7 +136,21 @@ public class FibonacciHeap
     */
     public void decreaseKey(HeapNode x, int delta)
     {    
-    	return; // should be replaced by student code
+    	x.key -= delta;
+        if(x.parent==null)
+        {
+            if(x.key<min.key)
+            {
+                min = x;
+            }
+        }
+        else
+        {
+            if(x.key<x.parent.key)
+            {
+                cascading(x);
+            }
+        }
     }
 
    /**
@@ -121,7 +160,7 @@ public class FibonacciHeap
     */
     public int nonMarked() 
     {    
-        return -232; // should be replaced by student code
+        return this.size - this.sum_marked;
     }
 
    /**
@@ -160,7 +199,7 @@ public class FibonacciHeap
     */
     public static int totalCuts()
     {    
-    	return -456; // should be replaced by student code
+    	return this.sum_cuts;
     }
 
      /**
@@ -176,6 +215,50 @@ public class FibonacciHeap
         int[] arr = new int[100];
         return arr; // should be replaced by student code
     }
+
+    public void cut(HeapNode node)
+    {
+        this.sum_cuts++;
+        //needs to add condition for root
+        HeapNode parent = node.parent;
+        node.parent=null;
+        if(node.marked)
+        {
+            node.marked = false;
+            sum_marked--;
+
+        }
+        parent.rank--;
+        if(node.right==null)
+        {
+            parent.child=null;
+        }
+        else
+        {
+            parent.child=node.right;
+            node.left.right=node.right;
+            node.right.left = node.left;
+        }
+    }
+    public void cascading-cut(HeapNode node)
+    {
+        HeapNode parent = node.parent;
+        cut(node)
+        if(parent!=null)
+        {
+            if(!parent.marked)
+            {
+                parent.marked=true;
+                this.sum_marked++;
+            }
+            else
+            {
+                cascading-cut(parent);
+            }
+        }
+
+    }
+
     
    /**
     * public class HeapNode
@@ -184,13 +267,42 @@ public class FibonacciHeap
     * (for example HeapNode), do it in this file, not in another file. 
     *  
     */
-    public static class HeapNode{
+    public static class HeapNode
+   {
+       public int key;
+       public HeapNode child;
+       public HeapNode parent;
+       public HeapNode left;
+       public HeapNode right;
+       public boolean marked;
+       public int rank;
 
-    	public int key;
+       public HeapNode getChild() {
+           return this.child;
+       }
+
+       public HeapNode getParent() {
+           return this.parent;
+       }
+
+       public HeapNode getLeft() {
+           return this.left;
+       }
+
+       public HeapNode getRight() {
+           return this.right;
+       }
+
+       public boolean isMarked() {
+           return this.marked;
+       }
+
+
 
     	public HeapNode(int key) {
     		this.key = key;
     	}
+
 
     	public int getKey() {
     		return this.key;
