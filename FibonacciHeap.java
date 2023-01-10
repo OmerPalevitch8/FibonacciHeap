@@ -1,7 +1,7 @@
 /** omer palevitch
  * 206840126
- *
- *
+ *Elad Shaba
+ *207909409
  * FibonacciHeap
  *
  * An implementation of a Fibonacci Heap over integers.
@@ -10,14 +10,25 @@ public class FibonacciHeap
 {
     private HeapNode min;
     private int size = 0;
-    private int sum_marked = 0;
-    private int sum_cuts = 0;
+    private int numOfTrees;
+    private int sum_marked;
+    public static int sum_cuts;
+    public static int sum_links;
+    public HeapNode first;
+    public HeapNode last;
    /**
     * public boolean isEmpty()
     *
     * Returns true if and only if the heap is empty.
     *   
     */
+    public FibonacciHeap() {
+		this.numOfTrees = 0;
+		this.sum_marked = 0;
+		sum_cuts = 0;
+		this.size = 0;
+		sum_links = 0;
+	}
     public boolean isEmpty()
 
     {
@@ -34,7 +45,29 @@ public class FibonacciHeap
     */
     public HeapNode insert(int key)
     {    
-    	return new HeapNode(key); // should be replaced by student code
+    	this.numOfTrees++;
+		this.size++;
+		HeapNode Node = new HeapNode(key);
+		
+		if (isEmpty()) {// If empty we'll make the new root it's minimum
+			this.min = Node;
+			last=Node;
+			first=Node;
+			Node.left=Node;
+			Node.right=Node;
+			return Node;
+		}
+		// if not empty
+		Node.right = last;
+		last.left=Node;
+		last=Node;
+		Node.left=first;
+		first.right=Node;
+	
+		if (key < this.min.getKey()) {
+			this.min = Node;
+		}
+		return Node;
     }
 
    /**
@@ -125,7 +158,11 @@ public class FibonacciHeap
     */
     public void delete(HeapNode x) 
     {    
-    	return; // should be replaced by student code
+		// thought about using Integer.Min_value?
+		int minKeyVal = min.getKey();
+		int delta = x.getKey() - minKeyVal + 1;
+		decreaseKey(x, delta);
+		deleteMin();
     }
 
    /**
@@ -174,7 +211,7 @@ public class FibonacciHeap
     */
     public int potential() 
     {    
-        return -234; // should be replaced by student code
+    	return this.numOfTrees+2*this.sum_marked;
     }
 
    /**
@@ -187,7 +224,7 @@ public class FibonacciHeap
     */
     public static int totalLinks()
     {    
-    	return -345; // should be replaced by student code
+    	return sum_links;
     }
 
    /**
@@ -199,7 +236,7 @@ public class FibonacciHeap
     */
     public static int totalCuts()
     {    
-    	return this.sum_cuts;
+    	return sum_cuts;
     }
 
      /**
@@ -212,8 +249,29 @@ public class FibonacciHeap
     */
     public static int[] kMin(FibonacciHeap H, int k)
     {    
-        int[] arr = new int[100];
-        return arr; // should be replaced by student code
+        int[] arr = new int[k];//changed from 100 to k?
+        if(k==0 || H.size()==0) {
+        	int[]list= new int[0];
+        }
+        HeapNode curr=H.min;
+        FibonacciHeap kminHeap=new FibonacciHeap();
+        kminHeap.insert(curr.getKey());
+        kminHeap.first.location=curr;
+        for(int i=0;i<k;i++) {
+        	arr[i]=kminHeap.min.getKey();
+        	if(kminHeap.min.location.child!=null) {
+        		HeapNode Child=kminHeap.min.location.child;
+        		HeapNode Flag=null;
+        		while(kminHeap.min.location.child!=Flag) {
+        			kminHeap.insert(Child.getKey());
+        			kminHeap.first.location=Child;
+        			Flag=Child.right;
+        			Child=Child.right;
+        		}
+        	}
+        	kminHeap.deleteMin();
+        }
+        return arr;
     }
 
     public void cut(HeapNode node)
@@ -274,8 +332,10 @@ public class FibonacciHeap
        public HeapNode parent;
        public HeapNode left;
        public HeapNode right;
-       public boolean marked;
-       public int rank;
+       public boolean marked = false;
+       public int rank =0;
+       public HeapNode location;
+       
 
        public HeapNode getChild() {
            return this.child;
