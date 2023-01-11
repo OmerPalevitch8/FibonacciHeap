@@ -70,6 +70,7 @@ public class FibonacciHeap
        }
        return Node;
    }
+
    /**
     * public void deleteMin()
     *
@@ -79,15 +80,52 @@ public class FibonacciHeap
     public void deleteMin()
     {
      	//if min is the only one
-        if((min.child==null)&(min.right==null))
+        if((min.child==null)&(min.right==min))
         {
             min = null;
-            this.size--1;
+            this.size--;
+            this.numOfTrees--;
+            this.first = null;
+            this.last=null;
             return;
         }
         else
         {
              this.size--1;
+             if(min.child==null)
+             {
+                 min.right.left = min.left;
+                 min.left.right = min.right;
+                 if(this.last==min)
+                 {
+                     this.last = min.right;
+                 }
+                 if(this.first==min)
+                 {
+                     this.first = min.left;
+                 }
+                 //finnding new min
+                 HeapNode min_node = min.right;
+                 HeapNode node = min.right.right;
+                 while(node!=min.right)
+                 {
+                     if(node.key<min.right.key)
+                     {
+                         min_node = node;
+                     }
+                     node = node.right;
+                 }
+                 min = min_node;
+                 this.numOfTrees--;
+                 consolidate();
+                 return;
+             }
+             else
+             {
+
+             }
+
+
 
         }
 
@@ -121,6 +159,21 @@ public class FibonacciHeap
     */
     public void meld (FibonacciHeap heap2)
     {
+        this.first.right=heap2.last;
+        heap2.last.left=this.first;
+        this.last.left = heap2.first;
+        heap2.first.right = this.last;
+        this.first = heap2.first;
+
+        if(this.min.key>heap2.min.key)
+        {
+            this.min = heap2.min;
+        }
+
+        this.size += heap2.size;
+        this.numOfTrees+=heap2.numOfTrees;
+        this.sum_marked+=heap2.sum_marked;
+        this.sum_links+=heap2.sum_links;
 
     }
 
@@ -327,6 +380,7 @@ public class FibonacciHeap
     public void cut(HeapNode node)
     {
         this.sum_cuts++;
+        this.numOfTrees++;
         //needs to add condition for root
         HeapNode parent = node.parent;
         node.parent=null;
@@ -366,6 +420,11 @@ public class FibonacciHeap
         }
 
     }
+
+    public void consolidate()
+        {
+            return;
+        }
 
     
    /**
