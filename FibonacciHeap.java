@@ -105,13 +105,35 @@ public class FibonacciHeap {
                 this.numOfTrees--;
                 consolidate();
                 return;
-            } else {
-
             }
-
-
+            else
+            {
+                this.size--;
+                if (this.last == min) {
+                    this.last = min.child;
+                }
+                if (this.first == min) {
+                    this.first = min.child;
+                }
+                HeapNode child = min.child;
+                child.left = min.left;
+                child.right = min.right;
+                child.parent = null;
+                min = child;
+                HeapNode node = child.right;
+                while(node!=child)
+                {
+                    if(node.key< min.key)
+                    {
+                        min = node;
+                    }
+                    node = node.right;
+                }
+            }
         }
 
+        consolidate();
+        return;;
 
     }
 
@@ -338,16 +360,17 @@ public class FibonacciHeap {
         parent.rank--;
         if (node.right == null) {
             parent.child = null;
-        } else {
+        }
+        else
+        {
             parent.child = node.right;
             node.left.right = node.right;
             node.right.left = node.left;
         }
+        this.insert_node(node);
     }
 
-    public void cascading-
-
-    cut(HeapNode node) {
+    public void cascading-cut(HeapNode node) {
         HeapNode parent = node.parent;
         cut(node)
         if (parent != null) {
@@ -362,9 +385,87 @@ public class FibonacciHeap {
     }
 
     public void consolidate() {
-        return;
+        HeapNode [] rankArr = new HeapNode[max_rank()+1];
+        rankArr[this.first.rank] = this.first;
+        HeapNode curr = this.first.right;
+        this.first.right = this.first;
+        this.first.left = this.first;
+        while (curr.key != first.key)
+        {
+            HeapNode next_node = curr.right;
+            curr.left = curr;
+            curr.right=curr;
+            while(rankArr[curr.rank]!= null && rankArr[curr.rank] !- curr.key)
+            {
+                HeapNode inBuck = rankArr[curr.rank];
+                if(inBuck.key<curr.key)
+                {
+                    this.connectSameTrees(inBuck,curr,rankArr);
+                    curr = inBuck;
+                }
+                else
+                {
+                    this.connectSameTrees(curr,inBuck,rankArr);
+                }
+            }
+            rankArr[curr.rank] = curr;
+            curr = curr.right;
+        }
+        this.first=null;
+        for (HeapNode node : rankArr)
+        {
+            if(node!=null)
+            {
+                if(this.first == null)
+                {
+                    this.first=node;
+                    this.min = node;
+                }
+                else
+                {
+                    this.last.right = node;
+                    node.left = this.last;
+                    if(node.key<this.min.key)
+                    {
+                        this.min= node;
+                    }
+                }
+                this.last = node;
+            }
+        }
+        if(this.first != null)
+        {
+            this.first.left = this.last;
+            this.last.right = this.first;
+        }
     }
 
+    public void connectSameTrees(HeapNode small, HeapNode big,HeapNode[] rankArr)
+    {
+        if(small.rank == 0)
+        {
+            small.child = big;
+            big.parent = small;
+        }
+        else
+        {
+            HeapNode prev = small.child;
+            small.child = big;
+            big.parent=small;
+            big.right = prev;
+            big.left = prev.left;
+            prev.left.right = big;
+            prev.left=big;
+        }
+        small.rank++;
+        rankArr[big.rank] = null;
+        if(rankArr[small.rank == null)
+        {
+            rankArr[small.rank] = small;
+        }
+        sum_links++;
+        numOfTrees--;
+    }
     public void insert_node(HeapNode node)
     {
         return;
@@ -423,4 +524,5 @@ public class FibonacciHeap {
     		return this.key;
     	}
     }
-}
+
+
