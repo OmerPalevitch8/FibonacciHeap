@@ -11,8 +11,8 @@ public class FibonacciHeap {
     private int size = 0;
     private int numOfTrees;
     private int sum_marked = 0;
-    private int sum_cuts = 0;
-    private int sum_links = 0;
+    private static int sum_cuts = 0;
+    private static int sum_links = 0;
     public HeapNode first;
     public HeapNode last;
 
@@ -82,7 +82,7 @@ public class FibonacciHeap {
             this.last = null;
             return;
         } else {
-            this.size-- 1;
+            this.size--;
             if (min.child == null) {
                 min.right.left = min.left;
                 min.left.right = min.right;
@@ -92,7 +92,7 @@ public class FibonacciHeap {
                 if (this.first == min) {
                     this.first = min.left;
                 }
-                //finnding new min
+                //finding new min
                 HeapNode min_node = min.right;
                 HeapNode node = min.right.right;
                 while (node != min.right) {
@@ -133,7 +133,7 @@ public class FibonacciHeap {
         }
 
         consolidate();
-        return;;
+        return;
 
     }
 
@@ -199,7 +199,7 @@ public class FibonacciHeap {
      * public int[] countersRep()
      * <p>
      * Return an array of counters. The i-th entry contains the number of trees of order i in the heap.
-     * (Note: The size of of the array depends on the maximum order of a tree.)
+     * (Note: The size of the array depends on the maximum order of a tree.)
      */
     public int[] countersRep() {
         int[] arr = new int[max_rank() + 1];
@@ -245,7 +245,7 @@ public class FibonacciHeap {
             }
         } else {
             if (x.key < x.parent.key) {
-                cascading(x);
+                this.cascadingCut(x);
             }
         }
     }
@@ -298,7 +298,7 @@ public class FibonacciHeap {
      * tree which has larger value in its root under the other tree.
      */
     public static int totalLinks() {
-        return this.sum_links;
+        return sum_links;
     }
 
     /**
@@ -309,7 +309,7 @@ public class FibonacciHeap {
      * from its parent (during decreaseKey/delete methods).
      */
     public static int totalCuts() {
-        return this.sum_cuts;
+        return sum_cuts;
     }
 
     /**
@@ -370,15 +370,15 @@ public class FibonacciHeap {
         this.insert_node(node);
     }
 
-    public void cascading-cut(HeapNode node) {
+    public void cascadingCut(HeapNode node) {
         HeapNode parent = node.parent;
-        cut(node)
+        cut(node);
         if (parent != null) {
             if (!parent.marked) {
                 parent.marked = true;
                 this.sum_marked++;
             } else {
-                cascading - cut(parent);
+                cascadingCut(parent);
             }
         }
 
@@ -395,7 +395,7 @@ public class FibonacciHeap {
             HeapNode next_node = curr.right;
             curr.left = curr;
             curr.right=curr;
-            while(rankArr[curr.rank]!= null && rankArr[curr.rank] !- curr.key)
+            while((rankArr[curr.rank]!= null) && (rankArr[curr.rank].key != curr.key))
             {
                 HeapNode inBuck = rankArr[curr.rank];
                 if(inBuck.key<curr.key)
@@ -459,7 +459,7 @@ public class FibonacciHeap {
         }
         small.rank++;
         rankArr[big.rank] = null;
-        if(rankArr[small.rank == null)
+        if(rankArr[small.rank] == null)
         {
             rankArr[small.rank] = small;
         }
@@ -472,7 +472,7 @@ public class FibonacciHeap {
     }
 
 
-}
+
    /**
     * public class HeapNode
     * 
@@ -524,5 +524,9 @@ public class FibonacciHeap {
     		return this.key;
     	}
     }
-
+    public static void main(String[] args) {
+        FibonacciHeap heap1 = new FibonacciHeap();
+        System.out.println(heap1.isEmpty());
+    }
+}
 
