@@ -162,6 +162,7 @@ public class FibonacciHeap {
             }
         }
         HeapNode curr = this.first;
+        HeapNode min_node = this.first;
         boolean first = false;
         while (curr!=this.first||first==false) {
             first=true;
@@ -169,9 +170,14 @@ public class FibonacciHeap {
                 curr.marked=false;
                 this.sum_marked--;
             }
+            if(curr.key<min_node.key)
+            {
+                min_node = curr;
+            }
             curr.parent=null;
             curr=curr.right;
         }
+        this.min = min_node;
         consolidate();
         return;
     }
@@ -433,8 +439,13 @@ public class FibonacciHeap {
     }
     //O(n) worst case, O(logn) amortiez
     public void consolidate() {
-        if(this.size==1||this.size==0)
+        if(this.size==0)
         {
+
+            return;
+        }
+        if(this.size==1){
+            this.last = min;
             return;
         }
         HeapNode[] box = new HeapNode[this.size+1];
