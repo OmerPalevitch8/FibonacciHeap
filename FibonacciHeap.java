@@ -65,10 +65,11 @@ public class FibonacciHeap {
         }
         // if not empty
         Node.right = first;
-        first.left = Node;
-        Node.left = last;
+        Node.left=first.left;
+        first.getPrev().setNext(Node);
+        first.setPrev(Node);
         first=Node;
-
+        
         if (key < this.min.getKey()) {
             this.min = Node;
         }
@@ -87,10 +88,10 @@ public class FibonacciHeap {
             return;
         }
         Node.right = first;
-        first.left = Node;
-        Node.left = last;
+        Node.left=first.left;
+        first.getPrev().setNext(Node);
+        first.setPrev(Node);
         first=Node;
-
         if (Node.key < this.min.getKey()) {
             this.min = Node;
         }
@@ -649,6 +650,14 @@ public class FibonacciHeap {
         public HeapNode getNext() {
             return this.right;
         }
+      //O(1)
+        public HeapNode setPrev(HeapNode node) {
+            return this.left=node;
+        }
+        //O(1)
+        public HeapNode setNext(HeapNode node) {
+            return this.right=node;
+        }
         //O(1)
         public boolean getMarked() {
             return this.marked;
@@ -666,13 +675,16 @@ public class FibonacciHeap {
     public static void main(String[] args) {
         FibonacciHeap heap1 = new FibonacciHeap();
         HeapNode a = null;
-        int[] val=new int[] {7,6};
+        int[] val=new int[] {5, 8, 2, 0};
         for (int i:val) {
         	a =heap1.insert(i);
         	
         }
-        heap1.deleteMin();
-        System.out.println(heap1.sum_marked);
+        HeapNode an=heap1.getFirst();
+        System.out.println(an.key);
+        System.out.println(an.getNext().key);
+        System.out.println(an.getNext().getNext().key);
+        System.out.println(an.getNext().getNext().getNext().key);
         
     }
 }
