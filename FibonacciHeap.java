@@ -373,10 +373,18 @@ public class FibonacciHeap {
      * ###CRITICAL### : you are NOT allowed to change H.
      */
     public static int[] kMin(FibonacciHeap H, int k) {
-        int[] arr = new int[k];//changed from 100 to k?
+
         if (k == 0 || H.size() == 0) {
-            int[] list = new int[0];
+            return new int[0];
+
         }
+        if(k==1||H.size()==1) {
+            int[]array=new int[1];
+            array[0]=H.min.getKey();
+            return array;
+
+        }
+        int[] arr = new int[k];//changed from 100 to k?
         HeapNode curr = H.min;
         FibonacciHeap kminHeap = new FibonacciHeap();
         kminHeap.insert(curr.getKey());
@@ -397,7 +405,6 @@ public class FibonacciHeap {
         }
         return arr;
     }
-
     //O(1)
     public void cut(HeapNode node) {
         this.sum_cuts++;
@@ -627,7 +634,7 @@ public class FibonacciHeap {
             {
                 heap1.insert(k);
             }
-            for (int k =0; k<(3*m/4);k++)
+            for (int k =1; k<=(3*m/4);k++)
             {
                 heap1.deleteMin();
             }
