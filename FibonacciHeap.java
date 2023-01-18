@@ -50,6 +50,7 @@ public class FibonacciHeap {
      * <p>
      * Returns the newly created node.
      */
+    //O(1)
     public HeapNode insert(int key) {
         this.numOfTrees++;
         this.size++;
@@ -75,7 +76,7 @@ public class FibonacciHeap {
         }
         return Node;
     }
-    //used for adding node after cut
+    //used for adding node after cut - O(1)
     public void insert_node(HeapNode Node)
     {
         this.numOfTrees++;
@@ -184,7 +185,7 @@ public class FibonacciHeap {
 
 
 
-
+    //O(1)
     /**
      * public HeapNode findMin()
      * <p>
@@ -241,6 +242,7 @@ public class FibonacciHeap {
      * <p>
      * Returns the number of elements in the heap.
      */
+    //O(1)
     public int size() {
 
         return this.size;
@@ -285,7 +287,7 @@ public class FibonacciHeap {
 
 
     }
-
+    //O(n) in worst case, amortized is O(log n)
     /**
      * public void delete(HeapNode x)
      * <p>
@@ -293,7 +295,7 @@ public class FibonacciHeap {
      * It is assumed that x indeed belongs to the heap.
      */
     public void delete(HeapNode x) {
-        // thought about using Integer.Min_value?
+        
         int minKeyVal = min.getKey();
         int delta = x.getKey() - minKeyVal + 1;
         decreaseKey(x, delta);
@@ -323,7 +325,7 @@ public class FibonacciHeap {
             }
         }
     }
-
+    //O(1)
     /**
      * public int nonMarked()
      * <p>
@@ -357,6 +359,7 @@ public class FibonacciHeap {
      * trees of the same rank, and generates a tree of rank bigger by one, by hanging the
      * tree which has larger value in its root under the other tree.
      */
+    //O(1)
     public static int totalLinks() {
         return sum_links;
     }
@@ -381,6 +384,7 @@ public class FibonacciHeap {
      * <p>
      * ###CRITICAL### : you are NOT allowed to change H.
      */
+    //O(k*deg(H))
     public static int[] kMin(FibonacciHeap H, int k) {
 
         if (k == 0 || H.size() == 0) {
