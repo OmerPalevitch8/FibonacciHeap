@@ -407,42 +407,58 @@ public class FibonacciHeap {
     }
     //O(1)
     public void cut(HeapNode node) {
-        this.sum_cuts++;
-        this.numOfTrees++;
-        //needs to add condition for root
-        HeapNode parent = node.parent;
-        node.parent = null;
-        if (node.marked) {
-            node.marked = false;
-            sum_marked--;
-
+        if(node.parent==null){
+            return;
         }
+        this.sum_cuts++;
+        HeapNode parent = node.parent;
         parent.rank--;
-        if (node.right == null) {
+        if(node.marked)
+        {
+            node.marked=false;
+            sum_marked--;
+        }
+        if (node.right == node) {
             parent.child = null;
         }
         else
         {
-            parent.child = node.right;
+            if(parent.child.key==node.key)
+            {
+                parent.child = node.right;
+            }
             node.left.right = node.right;
-            node.right.left = node.left;
+            node.right.left=node.left;
         }
+        node.parent = null;
         this.insert_node(node);
     }
 
     //O(n) worst case, O(1) amortiez
     public void cascadingCut(HeapNode node) {
-        HeapNode parent = node.parent;
-        cut(node);
-        if (parent != null) {
-            if (!parent.marked) {
-                parent.marked = true;
-                this.sum_marked++;
-            } else {
-                cascadingCut(parent);
+        if(node.parent==null){
+            return;
+        }
+        if(node.parent.marked) {
+            while (node.parent != null && node.parent.marked) {
+                HeapNode parent = node.parent;
+                cut(node);
+                node = parent;
+            }
+
+            if (node.parent.parent != null) {
+                node.parent.marked = true;
+                sum_marked++;
             }
         }
-
+        else {
+            if(node.parent.parent!=null)
+            {
+                node.parent.marked = true;
+                sum_marked++;
+                cut(node);
+            }
+        }
     }
     //O(n) worst case, O(logn) amortiez
     public void consolidate() {
@@ -497,7 +513,14 @@ public class FibonacciHeap {
                 lastConnect=nextConnect;
             }
         }
-        this.last =nextConnect;
+        if(nextConnect!=null)
+        {
+            this.last =nextConnect;
+
+        }
+        else {
+            this.last=this.first;
+        }
         HeapNode new_min = new HeapNode(Integer.MAX_VALUE);
         this.numOfTrees = 0;
         for(int i=0;i<box.length;i++) {
