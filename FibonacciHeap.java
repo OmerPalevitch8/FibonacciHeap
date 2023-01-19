@@ -221,7 +221,7 @@ public class FibonacciHeap {
         heap2.last.right = this.first;
         this.last.right = heap2.first;
         heap2.first.left = this.last;
-        this.first = heap2.first;
+        this.last = heap2.last;
 
         if (this.min.key > heap2.min.key) {
             this.min = heap2.min;
