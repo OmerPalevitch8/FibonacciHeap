@@ -477,7 +477,8 @@ public class FibonacciHeap {
             this.last = min;
             return;
         }
-        HeapNode[] box = new HeapNode[this.size+1];
+        int sizeArr = (int) (Math.log10(this.size)/Math.log10(0.5+Math.sqrt(1.25)));
+        HeapNode[] box = new HeapNode[sizeArr+10];
         HeapNode curr = this.first;
         int start = 0;
         boolean not_first = false;
@@ -663,42 +664,6 @@ public class FibonacciHeap {
         public int getKey() {
             return this.key;
         }
-    }
-    public static void main(String[] args) {
-        FibonacciHeap heap1 = new FibonacciHeap();
-        heap1.insert(2);
-        heap1.insert(1);
-        heap1.insert(3);
-        heap1.insert(7);
-        heap1.insert(4);
-        heap1.insert(8);
-        heap1.insert(6);
-        heap1.insert(5);
-        heap1.insert(9);
-        heap1.insert(10);
-        heap1.insert(11);
-        heap1.deleteMin();
-
-
-//        int[] arr1 = {6,8,10,12,14};
-//        for(int i = 0;i<5;i++)
-//        {
-//            double m = Math.pow(3,arr1[i]) - 1;
-//            FibonacciHeap heap1 = new FibonacciHeap();
-//            for (int k =0; k<m;k++)
-//            {
-//                heap1.insert(k);
-//            }
-//            for (int k =1; k<=(3*m/4);k++)
-//            {
-//                heap1.deleteMin();
-//            }
-//            System.out.println("m = " + Double.toString(m));
-//            System.out.println("links = " + Integer.toString(sum_links));
-//            System.out.println("cuts = " + Integer.toString(sum_cuts));
-//            System.out.println("potential = " + Integer.toString(heap1.potential()));
-//
-//        }
     }
 }
 
